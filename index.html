@@ -9,7 +9,7 @@ button{background:#fcee0a;color:#000;border:0;padding:8px 12px;font-weight:800;c
 .card.sel{outline:2px solid #fcee0a;box-shadow:0 0 14px #fcee0a}.tag{position:absolute;right:6px;top:6px;font-size:10px;font-weight:800}
 .leg{border-color:#fcee0a;box-shadow:0 0 10px #fcee0a55}.leg .tag{color:#fcee0a}.epi{border-color:#c050ff}.epi .tag{color:#c050ff}.rar{border-color:#00f0ff}.rar .tag{color:#00f0ff}.com .tag{color:#888}
 .st span{display:flex;align-items:center;gap:4px;font-size:11px}.st i{display:inline-block;height:5px;background:linear-gradient(90deg,#00f0ff,#fcee0a);flex:0 0 auto;max-width:55%}
-#field{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:4px;margin:10px 0}.slot{border:1px dashed #00f0ff44;padding:4px;min-height:44px;font-size:11px}.slot b{color:#00f0ff}.slot span{display:block}.slot.full{border:1px solid #fcee0a66}.slot.open{border-color:#fcee0a;cursor:pointer;animation:pulse 1s infinite}@keyframes pulse{50%{box-shadow:0 0 10px #fcee0a}}
+@keyframes pulse{50%{box-shadow:0 0 10px #fcee0a}}
 .chip{display:inline-block;background:#ff003c22;border:1px solid #ff003c;color:#ff7a90;padding:2px 6px;margin:2px;font-size:12px}
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#fcee0a;color:#000;padding:8px 14px;font-weight:800;opacity:0;transition:.3s}#toast.show{opacity:1}
 .g{padding:4px 6px;border-left:4px solid;margin:3px 0;animation:pop .3s}.win{border-color:#00f0ff}.loss{border-color:#ff003c;color:#ff9aa8}.g small{opacity:.7;display:block}
@@ -18,20 +18,76 @@ h2{font-size:56px;color:#fcee0a;margin:10px 0;text-shadow:0 0 16px #fcee0a}.grad
 .hd{display:flex;gap:8px;align-items:center}.av{width:48px;height:48px;border-radius:6px;object-fit:cover;border:1px solid #00f0ff88;flex:0 0 auto}.av.sm{width:28px;height:28px;vertical-align:middle;margin-right:4px}
 .ini{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ff003c,#2a0a3a);color:#fcee0a;font-weight:900;font-size:16px}.av.sm.ini{font-size:11px}
 .st{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:6px 0;text-align:center}.st div{background:#0b0b12;border:1px solid #00f0ff33;padding:3px 0}.st small{font-size:9px;letter-spacing:.5px;color:#00f0ff}.st big{display:block;font-size:22px;font-weight:900;color:#fcee0a}
-#picker{position:fixed;inset:0;background:#000c;display:flex;align-items:center;justify-content:center;z-index:9}#picker[hidden]{display:none}.pk{background:#141420;border:1px solid #fcee0a;padding:14px;max-width:420px;width:92%}.pos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}.pos button.taken{background:#222;color:#777;opacity:.6}.pos button.taken small{font-size:9px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.av.xs{width:22px;height:22px;display:block;margin:2px auto;filter:grayscale(1);font-size:9px}.pos button small{display:block;font-size:10px;font-weight:400}.pos button{clip-path:none;font-size:15px;padding:10px 0}.cancel{background:#333;color:#fff}
+#picker{position:fixed;inset:0;background:#000c;display:flex;align-items:center;justify-content:center;z-index:9}#picker[hidden]{display:none}.pk{background:#141420;border:1px solid #fcee0a;padding:14px;max-width:420px;width:92%}.pos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}.pos button{clip-path:none;font-size:15px;padding:10px 0}.cancel{background:#333;color:#fff}
 .ft div{padding:3px 0;border-bottom:1px solid #222;font-size:13px}.ft small{display:block;opacity:.75}
 .dtag{display:inline-block;margin-top:3px;font-size:10px;padding:1px 6px;border:1px solid #fcee0a88;color:#fcee0a;letter-spacing:.5px}
+#field{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:5px;margin:10px 0}
+.slot{border:1px dashed #00f0ff44;padding:5px 4px;height:86px;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;overflow:hidden;min-width:0}
+.slot>b{color:#00f0ff;font-size:12px;letter-spacing:1px;line-height:1}
+.slot.full{border:1px solid #fcee0a66;background:#141420}
+.slot .av.sm{width:40px;height:40px;margin:4px 0 3px;border-radius:6px;object-fit:cover;display:flex}
+.slot .av.sm.ini{font-size:13px;display:flex}
+.slot .nm{display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.endbar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+@media(max-width:400px){#field{grid-template-columns:repeat(4,1fr)}.slot{height:80px}.slot .av.sm{width:36px;height:36px}}
 .helpbtn{position:fixed;top:10px;right:10px;z-index:8;font-size:12px;padding:6px 10px}
 #help{position:fixed;inset:0;background:#000d;z-index:10;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:16px 8px}#help[hidden]{display:none}
 .hp{background:#141420;border:1px solid #00f0ff;box-shadow:0 0 18px #00f0ff55;max-width:620px;width:100%;padding:16px;font-size:15px;line-height:1.45}.hp h2{font-size:24px;margin:0 0 8px;text-shadow:0 0 8px #fcee0a}.hp h4{color:#00f0ff;margin:14px 0 4px;letter-spacing:1px}.hp ul{margin:4px 0;padding-left:20px}.hp b{color:#fcee0a}
+.pos button.taken{background:#222;color:#777;opacity:.6}.pos button.taken small{font-size:9px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.av.xs{width:22px;height:22px;display:block;margin:2px auto;filter:grayscale(1);font-size:9px;object-fit:cover;border-radius:4px}.pos button small{display:block;font-size:10px;font-weight:400}
+
+/* polish */
+:root{--y:#fcee0a;--c:#00f0ff;--r:#ff003c;--bg:#0b0b12;--pn:#13131d;--ln:#2a2a3a}
+body{padding:14px 12px 40px;font-size:15px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+h1{font-size:24px;margin:0;text-shadow:0 0 6px #fcee0a99,1px 0 #ff003c}
+.helpbtn{position:static}
+button{font:700 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:4px;clip-path:none;transition:transform .1s,filter .15s,opacity .15s;min-height:40px}
+button:active{transform:scale(.97)}button:hover:not(:disabled){filter:brightness(1.1)}
+button.ghost,.cancel{background:transparent;color:var(--c);border:1px solid var(--c)}
+.bar{gap:6px;margin:10px 0}.bar span{border-radius:4px;font-size:13px;padding:4px 8px;border-color:#00f0ff44}
+#roll{font-size:22px;margin:12px 0 8px;min-height:30px}
+#roll small{font-size:13px;font-weight:600;margin-left:6px}
+#rrA,#rrD{font-size:13px;padding:8px 12px;min-height:36px}
+#opts{gap:10px;margin-top:10px}
+.card{border-radius:6px;padding:10px;border-color:var(--ln);transition:transform .12s,border-color .15s}
+.card:active{transform:scale(.99)}
+.card b{font-size:16px}.card em{font-size:13px;line-height:1.35;margin-top:6px;opacity:.8}
+.leg{box-shadow:0 0 0 1px #fcee0a55,0 0 12px #fcee0a33}
+.st{gap:4px}.st div{border-radius:4px;padding:4px 0}
+.dtag{border-radius:3px}
+#field{gap:6px}
+.slot{border-radius:6px}
+.av{border-radius:6px}
+#picker,#help{transition:opacity .18s ease,visibility .18s}
+#picker[hidden],#help[hidden]{display:flex;opacity:0;visibility:hidden;pointer-events:none}
+#picker .pk,#help .hp{transition:transform .18s ease;transform:none;border-radius:8px}
+#picker[hidden] .pk,#help[hidden] .hp{transform:translateY(12px) scale(.98)}
+.pk{border-color:#fcee0a99;box-shadow:0 0 24px #0008}
+.pk .hd b{font-size:16px}
+.pos{gap:6px}
+.pos button{background:#1c1c28;color:var(--y);border:1px solid #fcee0a88;min-height:54px;padding:6px 2px;font-size:14px}
+.pos button small{color:#cfd8dc;opacity:.7}
+.pos button:not(.taken):hover{background:#fcee0a22}
+.pos button.taken{background:#15151d;border-color:#2a2a3a;color:#666;opacity:1}
+.pos button.taken small{color:#777}
+#toast{border-radius:4px;bottom:24px;font-size:14px;max-width:90vw;text-align:center}
+.endbar{display:flex;gap:8px;margin:12px 0}.endbar button{flex:1}
+#final h2{margin:6px 0 0;font-size:52px;line-height:1}
+.grade{font-size:22px;margin:4px 0}
+.sim{color:var(--c);opacity:.8;padding:10px 0}
+#games{margin:10px 0}.g{border-radius:0 4px 4px 0;background:#13131d;padding:6px 8px;margin:4px 0}
+#lineup h3{font-size:16px;margin:18px 0 6px;color:var(--c)}
+.ft div{display:grid;grid-template-columns:28px 42px 1fr;align-items:center;gap:0 6px;padding:5px 0}
+.ft div .av.sm{grid-row:span 2;margin:0}.ft div small{grid-column:2/4}
+@media(max-width:400px){body{padding:12px 10px 32px}#opts{grid-template-columns:1fr}.st big{font-size:20px}h1{font-size:21px}}
+.card .hd{padding-right:54px}.card .hd b{line-height:1.2}
 </style></head><body>
-<h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><small>Draft 22 Night City characters into a football lineup. Each round rolls an affiliation and offers 4-6 of its characters. One affiliation reroll and one fresh offer per run. Max 3 Legends. Then survive a 17-game season.</small>
-<div id="draft"><div class="bar"><span id="round"></span><span>Score <b id="score"></b></span><span id="leg"></span></div>
+<header class="top"><h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><button class="helpbtn ghost" onclick="document.getElementById('help').hidden=false">? Scoring</button></header><small>Draft 22 Night City characters into a football lineup. Each round rolls an affiliation and offers 4-6 of its characters. One affiliation reroll and one fresh offer per run. Max 3 Legends. Then survive a 17-game season.</small>
+<div id="draft"><div class="bar"><span id="round"></span><span>Picks <b id="score"></b></span><span id="leg"></span></div>
 <div id="roll"></div><button id="rrA" onclick="reroll('a')">↻ Affiliation</button> <button id="rrD" onclick="reroll('d')">↻ Fresh Offer</button>
 <p class="cy">Tap a character, then choose an open position.</p><small>Attributes are Cyberpunk's 1-20 scale ×5 (out of 100).</small><div id="opts"></div><div id="field"></div></div>
-<div id="end" hidden><div id="final"></div><button onclick="copy()">📋 Copy result</button> <button onclick="start()">▶ New draft</button><div id="games"></div></div>
-<div id="picker" hidden></div><button class="helpbtn" onclick="document.getElementById('help').hidden=false">? How Scoring Works</button>
-<div id="help" hidden onclick="if(event.target===this)this.hidden=true"><div class="hp">
+<div id="end" hidden><div class="endbar"><button onclick="start()">▶ New Game</button><button onclick="copy()">📋 Copy results</button></div><div id="final"></div><div id="games"></div><div id="lineup"></div><div class="endbar"><button onclick="start()">▶ New Game</button><button onclick="copy()">📋 Copy results</button></div></div>
+<div id="picker" hidden></div><div id="help" hidden onclick="if(event.target===this)this.hidden=true"><div class="hp">
 <h2>HOW SCORING WORKS</h2>
 <h4>ATTRIBUTES</h4>
 <p>Every character uses Cyberpunk 2077's five attributes: <b>Body, Reflexes, Technical Ability, Intelligence, Cool</b>. The game rates them 1-20; we show them ×5, so everything is out of 100.</p>
@@ -82,7 +138,7 @@ let run,phase='draft',sel=null;
 function rarity(c){if(c.legend)return['LEGEND','leg'];const a=c.at.reduce((s,x)=>s+x,0);return a>=72?['EPIC','epi']:a>=62?['RARE','rar']:['COMMON','com']}
 function start(){run=newRun();phase='draft';$('#end').hidden=true;$('#draft').hidden=false;nextRound()}
 function nextRound(){if(run.round>=22)return finish();rollAff(run);sel=null;render(true)}
-function render(anim){$('#round').textContent=`ROUND ${run.round+1}/22`;$('#score').textContent=teamScore(run.lineup);$('#leg').textContent=`Legends ${legends(run)}/3`;
+function render(anim){$('#round').textContent=`ROUND ${run.round+1}/22`;$('#score').textContent=`${run.round}/22`;$('#leg').textContent=`Legends ${legends(run)}/3`;
 const r=run.roll;$('#roll').innerHTML=`<span class="glitch" data-t="${r.aff}">${r.aff}</span> <small class="cy">${r.opts.length} on offer</small>`;if(anim){$('#roll').classList.remove('pop');void $('#roll').offsetWidth;$('#roll').classList.add('pop')}
 $('#rrA').disabled=!run.affR;$('#rrD').disabled=!run.offR;
 $('#opts').innerHTML=r.opts.map((c,i)=>{const[rn,rc]=rarity(c);return`<div class="card ${rc}" style="animation-delay:${i*60}ms" onclick="pick(${c.id})"><div class="tag">${rn}</div><div class="hd">${av(c)}<div><b>${c.name}</b><small>${c.aff}${c.grp!==c.aff&&c.grp!=='Netrunners'?'':''}</small><span class="dtag">${c.dist}</span></div></div><div class="st">${c.at.map((v,j)=>`<div><small>${AT[j]}</small><big>${v*5}</big></div>`).join('')}</div><em>${c.blurb}</em></div>`}).join('');
@@ -94,11 +150,12 @@ function place(i){if(!sel||run.lineup[i])return;run.lineup[i]=sel;run.used.add(s
 function reroll(t){if(t==='a'&&run.affR){run.affR=0;rollAff(run)}else if(t==='d'&&run.offR){run.offR=0;freshOffer(run)}sel=null;render(true)}
 function toast(t){const e=$('#toast');e.textContent=t;e.className='show';setTimeout(()=>e.className='',2200)}
 function grade(w){return w==17?'S+':w>=16?'S':w>=14?'A':w>=12?'B':w>=9?'C':w>=6?'D':'F'}
-function finish(){$('#draft').hidden=true;$('#end').hidden=false;const S=teamScore(run.lineup),g=season(S),w=g.filter(x=>x.w).length;
-$('#games').innerHTML='';$('#final').innerHTML='';g.forEach((x,i)=>setTimeout(()=>{const f=FLAV[x.w?'w':'l'][Math.floor(Math.random()*5)];$('#games').insertAdjacentHTML('beforeend',`<div class="g ${x.w?'win':'loss'}"><b>WK${i+1} ${x.w?'W':'L'}</b> vs ${x.n} (${x.o}) <small>${f}</small></div>`);if(i==16)showFinal(S,w)},i*220));}
+function finish(){sel=null;$('#picker').hidden=true;$('#picker').innerHTML='';$('#help').hidden=true;window.shareText='';window.scrollTo&&window.scrollTo(0,0);$('#draft').hidden=true;$('#end').hidden=false;const S=teamScore(run.lineup),g=season(S),w=g.filter(x=>x.w).length;
+$('#games').innerHTML='';$('#final').innerHTML='<div class="sim">Simulating season…</div>';$('#lineup').innerHTML='';g.forEach((x,i)=>setTimeout(()=>{const f=FLAV[x.w?'w':'l'][Math.floor(Math.random()*5)];$('#games').insertAdjacentHTML('beforeend',`<div class="g ${x.w?'win':'loss'}"><b>WK${i+1} ${x.w?'W':'L'}</b> vs ${x.n} (${x.o}) <small>${f}</small></div>`);if(i==16)showFinal(S,w)},i*220));}
 function showFinal(S,w){const gr=grade(w);const best=JSON.parse(localStorage.cp170best||'null');if(!best||w>best.w||(w==best.w&&S>best.s))localStorage.cp170best=JSON.stringify({w,s:S});const b=JSON.parse(localStorage.cp170best);
-$('#final').innerHTML=`<h2 class="${w==17?'perfect glitch':''}" data-t="${w}-${17-w}">${w}-${17-w}</h2><div class="grade">GRADE ${gr}</div><p>Team Score <b>${S}</b> · Best ever: ${b.w}-${17-b.w} (${b.s})</p>${w==17?'<p class="perfect">PERFECT SEASON. NIGHT CITY LEGEND.</p>':''}<h3>Your lineup: how their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
+$('#final').innerHTML=`<h2 class="${w==17?'perfect glitch':''}" data-t="${w}-${17-w}">${w}-${17-w}</h2><div class="grade">GRADE ${gr}</div><p>Team Score <b>${S}</b> · Best ever: ${b.w}-${17-b.w} (${b.s})</p>${w==17?'<p class="perfect">PERFECT SEASON. NIGHT CITY LEGEND.</p>':''}`;
+$('#lineup').innerHTML=`<h3>Your lineup: how their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
 window.shareText=`🏈 Cyberpunk 2077 17-0 Challenge\nRecord: ${w}-${17-w} (Grade ${gr})${w==17?' 🔥 PERFECT SEASON':''}\nTeam Score: ${S}\n`+POS.map(([p],i)=>`${p}: ${run.lineup[i].name}`).join('\n')+`\nPlay: ${location.href.split('#')[0]}`;}
-function copy(){navigator.clipboard.writeText(window.shareText).then(()=>toast('Copied! Paste it in a text.'),()=>prompt('Copy:',window.shareText))}
+function copy(){if(!window.shareText){toast('Season still playing…');return}navigator.clipboard.writeText(window.shareText).then(()=>toast('Copied! Paste it in a text.'),()=>prompt('Copy:',window.shareText))}
 start();
 </script></body></html>
