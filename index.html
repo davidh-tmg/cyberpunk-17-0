@@ -184,9 +184,9 @@ body.lock{overflow:hidden}
 .pk .fs .fn{font-size:8.5px!important;min-height:10px}
 @media(min-height:760px){.pk .av.fa{width:38px!important;height:38px!important}.pk .fg{gap:5px 3px!important}}
 </style></head><body>
-<header class="top"><h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><button class="helpbtn ghost" onclick="document.getElementById('help').hidden=false">? Scoring</button></header><small>Draft 23 Night City characters into a football lineup. Each round rolls an affiliation and offers 4-6 of its characters. One affiliation reroll and one fresh offer per run. Max 3 Legends. Then survive a 17-game season.</small>
+<header class="top"><h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><button class="helpbtn ghost" onclick="document.getElementById('help').hidden=false">? Scoring</button></header><small>Draft 23 Night City characters into a football lineup. Each round rolls an affiliation and shows everyone left in it. Two affiliation rerolls per run. Max 3 Legends. Then survive a 17-game season.</small>
 <div id="draft"><div class="bar"><span id="round"></span><span>Picks <b id="score"></b></span><span id="leg"></span></div>
-<div id="roll"></div><button id="rrA" onclick="reroll('a')">↻ Affiliation</button> <button id="rrD" onclick="reroll('d')">↻ Fresh Offer</button>
+<div id="roll"></div><button id="rrA" onclick="reroll('a')">↻ Affiliation (2)</button>
 <p class="cy">Tap a character, then choose an open position.</p><small>Attributes are Cyberpunk's 1-20 scale ×5 (out of 100).</small><div id="opts"></div><div id="field"></div></div>
 <div id="end" hidden><div class="endbar"><button onclick="start()">▶ New Game</button><button onclick="copy()">📋 Copy results</button><button class="imgbtn" onclick="shareImage()">🖼 Share image</button></div><div id="final"></div><div id="games"></div><div id="lineup"></div><div class="endbar"><button onclick="start()">▶ New Game</button><button onclick="copy()">📋 Copy results</button><button class="imgbtn" onclick="shareImage()">🖼 Share image</button></div></div>
 <div id="picker" hidden onclick="if(event.target===this)closePicker(event)"></div><div id="help" hidden onclick="if(event.target===this)this.hidden=true"><div class="hp">
@@ -208,8 +208,8 @@ body.lock{overflow:hidden}
 <h4>WHICH POSITIONS MATTER MOST</h4><p>Some spots count a little more than others, loosely based on real NFL positional value (pay and wins-above-replacement studies).</p><ul><li><b>QB</b> matters most.</li><li><b>Next:</b> WR, CB, EDGE and offensive tackles.</li><li><b>Then:</b> slot WR, safeties and DTs.</li><li><b>Then:</b> LB, interior O-line, TE and RB.</li><li><b>Least:</b> K.</li></ul><p>The differences are moderate, so every pick counts. A weak link anywhere still hurts.</p><h4>THE SEASON</h4>
 <p>You play 17 games against Night City crews that get tougher as you go, from Pacifica Scavs up to the Arasaka Elite. A higher Team Score means better odds, but upsets happen in this city. A 17-0 season is legend status.</p>
 <h4>DRAFT RULES</h4>
-<ul><li>Each round rolls an affiliation and offers 4-6 of its characters. Pick one, then choose an open position.</li>
-<li>One <b>Affiliation reroll</b> and one <b>Fresh Offer</b> (new faces, same group) per run.</li>
+<ul><li>Each round rolls an affiliation and shows everyone left in that group. Pick one, then choose an open position.</li>
+<li>Two <b>Affiliation rerolls</b> per run (always a different group when possible). A group stays in play while it has 2+ characters left.</li>
 <li>Max <b>3 Legends</b> per team. Choose your icons wisely.</li></ul>
 <button onclick="document.getElementById('help').hidden=true">Got it, choom</button>
 </div></div>
@@ -225,13 +225,12 @@ const SLOPE=17.5;
 const OPP=[['Pacifica Scavs',350],['Wraiths Raiders',390],['Coyote Cojo Regulars',430],['Animals Pit Crew',470],['Moxes',505],['6th Street Patriots',540],['Valentinos',575],['Maelstrom Ripjacks',610],['Voodoo Boys',645],['Tyger Claws',680],['NCPD Precinct 9',715],['Aldecaldos Convoy',750],['Kang Tao Security',785],['Biotechnica Enforcers',815],['Militech Strike Team',845],['MaxTac',880],['Arasaka Elite',910]];
 const K=56;function winP(s,o){return Math.min(0.985,1/(1+Math.exp(-(s-o)/K)))}
 function season(s,rnd=Math.random){return OPP.map(([n,o])=>({n,o,w:rnd()<winP(s,o)}))}
-function newRun(){return{lineup:Array(POS.length).fill(null),used:new Set(),round:0,affR:1,offR:1,roll:null}}
+function newRun(){return{lineup:Array(POS.length).fill(null),used:new Set(),round:0,affR:2,roll:null}}
 function legends(run){return run.lineup.filter(c=>c&&c.legend).length}
 function eligible(run){const L=legends(run)>=3;return CHARS.filter(c=>!run.used.has(c.id)&&!(L&&c.legend))}
 function shuf(a,rnd){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function rollAff(run,rnd=Math.random,keep){const el=eligible(run);const cnt={};el.forEach(c=>cnt[c.grp]=(cnt[c.grp]||0)+1);let gs=Object.keys(cnt).filter(k=>cnt[k]>=4);if(!gs.length)gs=Object.keys(cnt);const g=keep||gs[Math.floor(rnd()*gs.length)];const pool=shuf(el.filter(c=>c.grp===g),rnd);run.roll={aff:g,opts:pool.slice(0,4+Math.floor(rnd()*3))}}
-function freshOffer(run,rnd=Math.random){rollAff(run,rnd,run.roll.aff)}
-if(typeof module!=='undefined')module.exports={PV,freshOffer,CHARS,POS,rating,teamScore,OPP,winP,season,newRun,eligible,rollAff,legends};
+function rollAff(run,rnd=Math.random,avoid){const el=eligible(run);const cnt={};el.forEach(c=>cnt[c.grp]=(cnt[c.grp]||0)+1);let gs=Object.keys(cnt).filter(k=>cnt[k]>=2);if(!gs.length)gs=Object.keys(cnt);if(avoid&&gs.length>1)gs=gs.filter(k=>k!==avoid);const g=gs[Math.floor(rnd()*gs.length)];const pool=shuf(el.filter(c=>c.grp===g),rnd);run.roll={aff:g,opts:pool}}
+if(typeof module!=='undefined')module.exports={PV,CHARS,POS,rating,teamScore,OPP,winP,season,newRun,eligible,rollAff,legends};
 
 const $=s=>document.querySelector(s);const AT=['BODY','REFLEXES','TECH','INTEL','COOL'],FT=['SPD','STR','VIS','TGH','HND','CLT'];
 function ini(n){return n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase()}
@@ -250,7 +249,7 @@ const k=21,kc=run.lineup[k],kcan=mode==='pick'&&!kc;
 return`<div class="fld"><div class="ez">NIGHT CITY</div><div class="half def"><div class="fl">DEFENSE</div><div class="fg">${DEF.map(cell).join('')}</div></div><div class="los"><span>LINE OF SCRIMMAGE</span></div><div class="half off"><div class="fg">${OFF.map(cell).join('')}</div><div class="fl">OFFENSE</div></div><div class="kz"><div class="fl">SPECIAL TEAMS</div><div class="fg kg"><div class="fs ${kc?'full '+rarity(kc)[1]:''} ${kcan?'open':''}" style="grid-column:4/6" ${kcan?`onclick="place(21)"`:''}>${kc?av(kc,'av fa'):`<span class="av fa emp"></span>`}<b>K</b><span class="fn">${kc?short(kc.name):(kcan?'open':'')}</span></div></div></div><div class="ez ez2">17 · 0</div></div>`}
 function render(anim){if(anim&&window.scrollTo)try{window.scrollTo({top:0,behavior:'smooth'})}catch(e){};$('#round').textContent=`ROUND ${run.round+1}/${POS.length}`;$('#score').textContent=`${run.round}/${POS.length}`;$('#leg').textContent=`Legends ${legends(run)}/3`;
 const r=run.roll;$('#roll').innerHTML=`<span class="glitch" data-t="${r.aff}">${r.aff}</span> <small class="cy">${r.opts.length} on offer</small>`;if(anim){$('#roll').classList.remove('pop');void $('#roll').offsetWidth;$('#roll').classList.add('pop')}
-$('#rrA').disabled=!run.affR;$('#rrD').disabled=!run.offR;
+$('#rrA').disabled=!run.affR;$('#rrA').textContent='↻ Affiliation ('+run.affR+')';
 $('#opts').innerHTML=r.opts.map((c,i)=>{const[rn,rc]=rarity(c);return`<div class="card ${rc}" style="animation-delay:${i*60}ms" onclick="pick(${c.id})"><div class="tag">${rn}</div><div class="hd">${av(c)}<div><b>${c.name}</b><small>${c.aff}${c.grp!==c.aff&&c.grp!=='Netrunners'?'':''}</small><span class="dtag">${c.dist}</span></div></div><div class="st">${c.at.map((v,j)=>`<div><small>${AT[j]}</small><big>${v*5}</big></div>`).join('')}</div><em>${c.blurb}</em></div>`}).join('');
 $('#field').innerHTML=formation('view');
 }
@@ -259,7 +258,7 @@ function openPicker(){const p=$('#picker');p.innerHTML=`<div class="pk"><div cla
 function closePicker(e){if(e){e.preventDefault();e.stopPropagation()}sel=null;const p=$('#picker');p.hidden=true;document.body.classList.remove('lock');p.innerHTML=''}
 function pick(id){if(!$('#picker').hidden)return;sel=CHARS[id];openPicker()}
 function place(i){if(!sel||run.lineup[i]||Date.now()-pkBusy<250)return;const s=sel;closePicker();sel=s;run.lineup[i]=sel;run.used.add(sel.id);sel=null;run.round++;nextRound()}
-function reroll(t){if(t==='a'&&run.affR){run.affR=0;rollAff(run)}else if(t==='d'&&run.offR){run.offR=0;freshOffer(run)}sel=null;render(true)}
+function reroll(t){if(t==='a'&&run.affR){run.affR--;rollAff(run,Math.random,run.roll.aff)}sel=null;render(true)}
 function toast(t){const e=$('#toast');e.textContent=t;e.className='show';setTimeout(()=>e.className='',2200)}
 function grade(w){return w==17?'S+':w>=16?'S':w>=14?'A':w>=12?'B':w>=9?'C':w>=6?'D':'F'}
 function finish(){closePicker();closeBio();window.lastRes=null;$('#help').hidden=true;window.shareText='';window.scrollTo&&window.scrollTo(0,0);$('#draft').hidden=true;$('#end').hidden=false;const S=teamScore(run.lineup),g=season(S),w=g.filter(x=>x.w).length;
