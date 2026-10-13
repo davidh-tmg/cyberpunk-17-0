@@ -83,6 +83,21 @@ button.ghost,.cancel{background:transparent;color:var(--c);border:1px solid var(
 .card .hd{padding-right:54px}.card .hd b{line-height:1.2}
 .cos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 4px}.co{background:var(--pn);border:1px solid;border-radius:8px;padding:10px;min-width:0}.co.best{border-color:var(--c);box-shadow:0 0 10px #00f0ff22}.co.weak{border-color:var(--r);box-shadow:0 0 10px #ff003c22}.co>small{display:block;font-weight:800;letter-spacing:1px;font-size:11px;margin-bottom:6px}.co.best>small{color:var(--c)}.co.weak>small{color:var(--r)}.co b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}.co .hd>div{min-width:0}.co span{font-size:12px;opacity:.8}
 @media(max-width:400px){.cos{grid-template-columns:1fr}}
+.fld{background:repeating-linear-gradient(0deg,#0d1a12 0 38px,#0f1f15 38px 39px,#0d1a12 39px 40px);border:1px solid #1f3a2a;border-radius:8px;padding:6px 4px 8px;margin:10px 0}
+.fl{font-size:10px;letter-spacing:2px;color:#7fbf9a;opacity:.8;text-align:center;margin:6px 0 4px}
+.fg{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px 3px;justify-items:center}
+.fs{width:100%;max-width:62px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;padding:3px 1px;border-radius:6px;border:1px dashed #00f0ff33;background:#0b0b12aa}
+.fs.full{border:1px solid #fcee0a55;background:#13131d}
+.fs.open{border:1px solid var(--y);cursor:pointer;background:#fcee0a14}.fs.open:hover{background:#fcee0a2a}
+.fs b{font-size:9px;color:var(--c);letter-spacing:.5px;line-height:1.1;margin-top:2px}
+.fs .fn{font-size:9px;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;min-height:11px}
+.fs.open .fn{color:var(--y)}
+.av.fa{width:30px;height:30px;border-radius:5px;object-fit:cover;display:flex;font-size:10px}
+.av.fa.emp{background:#ffffff08;border:1px dashed #ffffff22}
+.pk .fld{margin:8px 0}.pk{max-height:94vh;overflow:auto}
+#field{display:block}
+@media(min-width:600px){.av.fa{width:40px;height:40px}.fs b,.fs .fn{font-size:11px}.fs{max-width:84px}}
+.los{height:2px;margin:8px 4px;background:linear-gradient(90deg,transparent,#00f0ff88,transparent)}
 </style></head><body>
 <header class="top"><h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><button class="helpbtn ghost" onclick="document.getElementById('help').hidden=false">? Scoring</button></header><small>Draft 22 Night City characters into a football lineup. Each round rolls an affiliation and offers 4-6 of its characters. One affiliation reroll and one fresh offer per run. Max 3 Legends. Then survive a 17-game season.</small>
 <div id="draft"><div class="bar"><span id="round"></span><span>Picks <b id="score"></b></span><span id="leg"></span></div>
@@ -105,7 +120,7 @@ button.ghost,.cancel{background:transparent;color:var(--c);border:1px solid var(
 <p>Put a netrunner on the line and it'll show. Smasher at wideout? Bold choice.</p>
 <h4>TEAM SCORE</h4>
 <p>Your Team Score is simply how well each of your 22 players fits their spot. Right character, right position, and the numbers stack up.</p>
-<h4>WHICH POSITIONS MATTER MOST</h4><p>Not every spot counts the same, just like the real NFL. Based on real-world positional value (pay and wins-above-replacement studies):</p><ul><li><b>QB</b> matters most, by a lot.</li><li><b>Next tier:</b> WR, CB, EDGE and offensive tackles.</li><li><b>Middle:</b> slot WR, safeties and DTs.</li><li><b>Solid but smaller:</b> LB, interior O-line and TE.</li><li><b>Least:</b> RB, then K.</li></ul><p>Your best talent belongs at quarterback.</p><h4>THE SEASON</h4>
+<h4>WHICH POSITIONS MATTER MOST</h4><p>Some spots count a little more than others, loosely based on real NFL positional value (pay and wins-above-replacement studies).</p><ul><li><b>QB</b> matters most.</li><li><b>Next:</b> WR, CB, EDGE and offensive tackles.</li><li><b>Then:</b> slot WR, safeties and DTs.</li><li><b>Then:</b> LB, interior O-line, TE and RB.</li><li><b>Least:</b> K.</li></ul><p>The differences are moderate, so every pick counts. A weak link anywhere still hurts.</p><h4>THE SEASON</h4>
 <p>You play 17 games against Night City crews that get tougher as you go, from Pacifica Scavs up to the Arasaka Elite. A higher Team Score means better odds, but upsets happen in this city. A 17-0 season is legend status.</p>
 <h4>DRAFT RULES</h4>
 <ul><li>Each round rolls an affiliation and offers 4-6 of its characters. Pick one, then choose an open position.</li>
@@ -119,7 +134,7 @@ const MERGE={Militech:'Corpos',Biotechnica:'Corpos',Wraiths:'Animals & Raiders',
 // stats: SPD STR SMT TGH HND
 const POS=[['QB',[1,0,4,1,2,3]],['RB',[4,2,0,2,1,1]],['WR',[4,0,1,0,3,1]],['WR',[4,0,1,0,3,1]],['SLOT',[4,0,2,0,2,1]],['TE',[1,3,0,2,2,0]],['LT',[0,4,1,3,1,0]],['LG',[0,4,0,3,1,0]],['C',[0,3,2,3,1,0]],['RG',[0,4,0,3,1,0]],['RT',[0,4,1,3,1,0]],['EDGE',[3,3,0,2,0,0]],['DT',[0,4,0,4,0,0]],['DT',[0,4,0,4,0,0]],['EDGE',[3,3,0,2,0,0]],['LB',[2,3,2,2,0,1]],['LB',[2,3,2,2,0,1]],['CB',[4,0,1,0,2,1]],['CB',[4,0,1,0,2,1]],['S',[3,1,2,1,1,1]],['S',[3,1,2,1,1,1]],['K',[0,1,0,0,2,5]]];
 function rating(c,p){const w=POS[p][1];let s=0,t=0;w.forEach((x,j)=>{s+=x*c.st[j];t+=x});return s/t}
-const PV={QB:3,WR:1.5,CB:1.4,EDGE:1.4,LT:1.3,RT:1.3,SLOT:1.2,S:1.2,DT:1.1,LB:1,LG:1,C:1,RG:1,TE:.9,RB:.8,K:.4};
+const PV={QB:1.6,WR:1.3,CB:1.25,EDGE:1.25,LT:1.2,RT:1.2,SLOT:1.1,S:1.1,DT:1.05,LB:1,LG:1,C:1,RG:1,TE:.95,RB:.9,K:.7};
 function teamScore(lineup){if(!lineup.some(Boolean))return 0;let s=0,t=0;POS.forEach(([p],i)=>{t+=PV[p];if(lineup[i])s+=PV[p]*rating(lineup[i],i)});const avg=s/t;return Math.round(300+(avg-45)*SLOPE)}
 const SLOPE=17;
 const OPP=[['Pacifica Scavs',350],['Wraiths Raiders',390],['Coyote Cojo Regulars',430],['Animals Pit Crew',470],['Moxes',505],['6th Street Patriots',540],['Valentinos',575],['Maelstrom Ripjacks',610],['Voodoo Boys',645],['Tyger Claws',680],['NCPD Precinct 9',715],['Aldecaldos Convoy',750],['Kang Tao Security',785],['Biotechnica Enforcers',815],['Militech Strike Team',845],['MaxTac',880],['Arasaka Elite',910]];
@@ -141,12 +156,17 @@ let run,phase='draft',sel=null;
 function rarity(c){if(c.legend)return['LEGEND','leg'];const a=c.at.reduce((s,x)=>s+x,0);return a>=72?['EPIC','epi']:a>=62?['RARE','rar']:['COMMON','com']}
 function start(){run=newRun();phase='draft';$('#end').hidden=true;$('#draft').hidden=false;nextRound()}
 function nextRound(){if(run.round>=22)return finish();rollAff(run);sel=null;render(true)}
+const OFF=[[2,1,1],[6,2,1],[7,3,1],[8,4,1],[9,5,1],[10,6,1],[5,7,1],[3,8,1],[4,2,2],[0,4,2],[1,4,3]],DEF=[[19,2,1],[20,7,1],[15,3,2],[16,6,2],[17,1,3],[11,3,3],[12,4,3],[13,5,3],[14,6,3],[18,8,3]];
+function short(n){const m={'Mr. Hands':'Hands','El Capitan':'Capitan','Mama Welles':'Mama W.','Dum Dum':'Dum Dum','Us Cracks':'Us Cracks','Garry the Prophet':'Garry','Gizmo Rodriguez':'Gizmo'};return m[n]||(n.length<=7?n:n.split(' ')[0])}
+function formation(mode){const cell=([i,col,row])=>{const c=run.lineup[i],p=POS[i][0],can=mode==='pick'&&!c;return`<div class="fs ${c?'full':''} ${can?'open':''}" style="grid-column:${col};grid-row:${row}" ${can?`onclick="place(${i})"`:''}>${c?av(c,'av fa'):`<span class="av fa emp"></span>`}<b>${p}</b><span class="fn">${c?short(c.name):(can?'open':'')}</span></div>`};
+const k=21,kc=run.lineup[k],kcan=mode==='pick'&&!kc;
+return`<div class="fld"><div class="fl">DEFENSE</div><div class="fg">${DEF.map(cell).join('')}</div><div class="los"></div><div class="fg">${OFF.map(cell).join('')}</div><div class="fl">OFFENSE</div><div class="fl">SPECIAL TEAMS</div><div class="fg kg"><div class="fs ${kc?'full':''} ${kcan?'open':''}" style="grid-column:4/6" ${kcan?`onclick="place(21)"`:''}>${kc?av(kc,'av fa'):`<span class="av fa emp"></span>`}<b>K</b><span class="fn">${kc?short(kc.name):(kcan?'open':'')}</span></div></div></div>`}
 function render(anim){if(anim&&window.scrollTo)try{window.scrollTo({top:0,behavior:'smooth'})}catch(e){};$('#round').textContent=`ROUND ${run.round+1}/22`;$('#score').textContent=`${run.round}/22`;$('#leg').textContent=`Legends ${legends(run)}/3`;
 const r=run.roll;$('#roll').innerHTML=`<span class="glitch" data-t="${r.aff}">${r.aff}</span> <small class="cy">${r.opts.length} on offer</small>`;if(anim){$('#roll').classList.remove('pop');void $('#roll').offsetWidth;$('#roll').classList.add('pop')}
 $('#rrA').disabled=!run.affR;$('#rrD').disabled=!run.offR;
 $('#opts').innerHTML=r.opts.map((c,i)=>{const[rn,rc]=rarity(c);return`<div class="card ${rc}" style="animation-delay:${i*60}ms" onclick="pick(${c.id})"><div class="tag">${rn}</div><div class="hd">${av(c)}<div><b>${c.name}</b><small>${c.aff}${c.grp!==c.aff&&c.grp!=='Netrunners'?'':''}</small><span class="dtag">${c.dist}</span></div></div><div class="st">${c.at.map((v,j)=>`<div><small>${AT[j]}</small><big>${v*5}</big></div>`).join('')}</div><em>${c.blurb}</em></div>`}).join('');
-$('#field').innerHTML=POS.map(([p],i)=>{const c=run.lineup[i];return`<div class="slot ${c?'full':''}"><b>${p}</b>${c?`${av(c,'av sm')}<span>${c.name}</span>`:''}</div>`}).join('');
-$('#picker').hidden=!sel;if(sel)$('#picker').innerHTML=`<div class="pk"><div class="hd">${av(sel)}<b>Place ${sel.name}</b></div><div class="pos">${POS.map(([p],i)=>{const o=run.lineup[i];return o?`<button class="taken" disabled><b>${p}</b>${av(o,'av xs')}<small>${o.name}</small></button>`:`<button onclick="place(${i})"><b>${p}</b><small>open</small></button>`}).join('')}</div><button class="cancel" onclick="sel=null;render()">✕ Back</button></div>`;
+$('#field').innerHTML=formation('view');
+$('#picker').hidden=!sel;if(sel)$('#picker').innerHTML=`<div class="pk"><div class="hd">${av(sel)}<b>Place ${sel.name}</b></div><small class="cy">Tap an open spot</small>${formation('pick')}<button class="cancel" onclick="sel=null;render()">✕ Back</button></div>`;
 }
 function pick(id){sel=CHARS[id];render()}
 function place(i){if(!sel||run.lineup[i])return;run.lineup[i]=sel;run.used.add(sel.id);run.round++;nextRound()}
@@ -159,7 +179,7 @@ function showFinal(S,w){const gr=grade(w);const best=JSON.parse(localStorage.cp1
 $('#final').innerHTML=`<h2 class="${w==17?'perfect glitch':''}" data-t="${w}-${17-w}">${w}-${17-w}</h2><div class="grade">GRADE ${gr}</div><p>Team Score <b>${S}</b> · Best ever: ${b.w}-${17-b.w} (${b.s})</p>${w==17?'<p class="perfect">PERFECT SEASON. NIGHT CITY LEGEND.</p>':''}`;
 const rs=POS.map(([p],i)=>({p,c:run.lineup[i],r:Math.round(rating(run.lineup[i],i))}));const bf=rs.reduce((a,b)=>b.r>a.r?b:a),wl=rs.reduce((a,b)=>b.r<a.r?b:a);
 const co=(t,x,cl)=>`<div class="co ${cl}"><small>${t}</small><div class="hd">${av(x.c)}<div><b>${x.c.name}</b><span>${x.p} · Rating ${x.r}</span></div></div></div>`;
-$('#lineup').innerHTML=`<div class="cos">${co('★ BEST FIT',bf,'best')}${co('⚠ WEAKEST LINK',wl,'weak')}</div>`+`<h3>Your lineup: how their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
+$('#lineup').innerHTML=`<h3>Your lineup</h3>${formation('view')}<div class="cos">${co('★ BEST FIT',bf,'best')}${co('⚠ WEAKEST LINK',wl,'weak')}</div>`+`<h3>How their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
 window.shareText=`🏈 Cyberpunk 2077 17-0 Challenge\nRecord: ${w}-${17-w} (Grade ${gr})${w==17?' 🔥 PERFECT SEASON':''}\nTeam Score: ${S}\n`+POS.map(([p],i)=>`${p}: ${run.lineup[i].name}`).join('\n')+`\nPlay: ${location.href.split('#')[0]}`;}
 function copy(){if(!window.shareText){toast('Season still playing…');return}navigator.clipboard.writeText(window.shareText).then(()=>toast('Copied! Paste it in a text.'),()=>prompt('Copy:',window.shareText))}
 start();
