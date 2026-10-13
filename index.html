@@ -18,7 +18,7 @@ h2{font-size:56px;color:#fcee0a;margin:10px 0;text-shadow:0 0 16px #fcee0a}.grad
 .hd{display:flex;gap:8px;align-items:center}.av{width:48px;height:48px;border-radius:6px;object-fit:cover;border:1px solid #00f0ff88;flex:0 0 auto}.av.sm{width:28px;height:28px;vertical-align:middle;margin-right:4px}
 .ini{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ff003c,#2a0a3a);color:#fcee0a;font-weight:900;font-size:16px}.av.sm.ini{font-size:11px}
 .st{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:6px 0;text-align:center}.st div{background:#0b0b12;border:1px solid #00f0ff33;padding:3px 0}.st small{font-size:9px;letter-spacing:.5px;color:#00f0ff}.st big{display:block;font-size:22px;font-weight:900;color:#fcee0a}
-#picker{position:fixed;inset:0;background:#000c;display:flex;align-items:center;justify-content:center;z-index:9}#picker[hidden]{display:none}.pk{background:#141420;border:1px solid #fcee0a;padding:14px;max-width:420px;width:92%}.pos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}.pos button{clip-path:none;font-size:15px;padding:10px 0}.cancel{background:#333;color:#fff}
+#picker{position:fixed;inset:0;background:#000c;display:flex;align-items:center;justify-content:center;z-index:9}#picker[hidden]{display:none}.pk{background:#141420;border:1px solid #fcee0a;padding:14px;max-width:420px;width:92%}.pos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}.pos button.taken{background:#222;color:#777;opacity:.6}.pos button.taken small{font-size:9px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.av.xs{width:22px;height:22px;display:block;margin:2px auto;filter:grayscale(1);font-size:9px}.pos button small{display:block;font-size:10px;font-weight:400}.pos button{clip-path:none;font-size:15px;padding:10px 0}.cancel{background:#333;color:#fff}
 .ft div{padding:3px 0;border-bottom:1px solid #222;font-size:13px}.ft small{display:block;opacity:.75}
 .dtag{display:inline-block;margin-top:3px;font-size:10px;padding:1px 6px;border:1px solid #fcee0a88;color:#fcee0a;letter-spacing:.5px}
 .helpbtn{position:fixed;top:10px;right:10px;z-index:8;font-size:12px;padding:6px 10px}
@@ -28,7 +28,7 @@ h2{font-size:56px;color:#fcee0a;margin:10px 0;text-shadow:0 0 16px #fcee0a}.grad
 <h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><small>Draft 22 Night City characters into a football lineup. Each round rolls an affiliation and offers 4-6 of its characters. One affiliation reroll and one fresh offer per run. Max 3 Legends. Then survive a 17-game season.</small>
 <div id="draft"><div class="bar"><span id="round"></span><span>Score <b id="score"></b></span><span id="leg"></span></div>
 <div id="roll"></div><button id="rrA" onclick="reroll('a')">↻ Affiliation</button> <button id="rrD" onclick="reroll('d')">↻ Fresh Offer</button>
-<p class="cy">Tap a character, then choose an open position.</p><small>Attributes are Cyberpunk's 1-20 scale ×5 (out of 100).</small><div id="opts"></div><div id="chem"></div><div id="field"></div></div>
+<p class="cy">Tap a character, then choose an open position.</p><small>Attributes are Cyberpunk's 1-20 scale ×5 (out of 100).</small><div id="opts"></div><div id="field"></div></div>
 <div id="end" hidden><div id="final"></div><button onclick="copy()">📋 Copy result</button> <button onclick="start()">▶ New draft</button><div id="games"></div></div>
 <div id="picker" hidden></div><button class="helpbtn" onclick="document.getElementById('help').hidden=false">? How Scoring Works</button>
 <div id="help" hidden onclick="if(event.target===this)this.hidden=true"><div class="hp">
@@ -46,9 +46,7 @@ h2{font-size:56px;color:#fcee0a;margin:10px 0;text-shadow:0 0 16px #fcee0a}.grad
 <li><b>RB, TE, EDGE, LB, S:</b> mixes. Speed with power, or brains with toughness.</li></ul>
 <p>Put a netrunner on the line and it'll show. Smasher at wideout? Bold choice.</p>
 <h4>TEAM SCORE</h4>
-<p>Your Team Score is how well each of your 22 players fits their spot, plus <b>chemistry</b>:</p>
-<ul><li><b>Named combos</b>, like <b>Choom Squad</b> (V + Jackie + Johnny), <b>Samurai Reunion</b> (the whole band), or <b>Arasaka Dynasty</b> (Saburo, Yorinobu, Hanako). Some are secret. Find them all.</li>
-<li><b>Same-group stacking:</b> 3 or more from one affiliation earns a bonus that grows with each extra member.</li></ul>
+<p>Your Team Score is simply how well each of your 22 players fits their spot. Right character, right position, and the numbers stack up.</p>
 <h4>THE SEASON</h4>
 <p>You play 17 games against Night City crews that get tougher as you go, from Pacifica Scavs up to the Arasaka Elite. A higher Team Score means better odds, but upsets happen in this city. A 17-0 season is legend status.</p>
 <h4>DRAFT RULES</h4>
@@ -63,9 +61,8 @@ const MERGE={Militech:'Corpos',Biotechnica:'Corpos',Wraiths:'Animals & Raiders',
 // stats: SPD STR SMT TGH HND
 const POS=[['QB',[1,0,4,1,2,3]],['RB',[4,2,0,2,1,1]],['WR',[4,0,1,0,3,1]],['WR',[4,0,1,0,3,1]],['SLOT',[4,0,2,0,2,1]],['TE',[1,3,0,2,2,0]],['LT',[0,4,1,3,1,0]],['LG',[0,4,0,3,1,0]],['C',[0,3,2,3,1,0]],['RG',[0,4,0,3,1,0]],['RT',[0,4,1,3,1,0]],['EDGE',[3,3,0,2,0,0]],['DT',[0,4,0,4,0,0]],['DT',[0,4,0,4,0,0]],['EDGE',[3,3,0,2,0,0]],['LB',[2,3,2,2,0,1]],['LB',[2,3,2,2,0,1]],['CB',[4,0,1,0,2,1]],['CB',[4,0,1,0,2,1]],['S',[3,1,2,1,1,1]],['S',[3,1,2,1,1,1]],['K',[0,1,0,0,2,5]]];
 function rating(c,p){const w=POS[p][1];let s=0,t=0;w.forEach((x,j)=>{s+=x*c.st[j];t+=x});return s/t}
-const COMBOS=[["Choom Squad", ["V", "Jackie Welles", "Johnny Silverhand"], 30], ["Samurai Reunion", ["Johnny Silverhand", "Kerry Eurodyne", "Bes Isis", "Denny", "Henry"], 30], ["Konpeki Heist Crew", ["V", "Jackie Welles", "T-Bug", "Dexter DeShawn", "Evelyn Parker"], 25], ["Old Flames", ["Johnny Silverhand", "Rogue Amendiares"], 12], ["Judy & Evelyn", ["Judy Alvarez", "Evelyn Parker"], 10], ["Clouds Drama", ["Evelyn Parker", "Maiko Maeda", "Woodman"], 10], ["Arasaka Dynasty", ["Saburo Arasaka", "Yorinobu Arasaka", "Hanako Arasaka"], 20], ["Loyal Blades", ["Goro Takemura", "Sandayu Oda"], 12], ["Ripper & Partner", ["Viktor Vektor", "Misty Olszewski"], 8], ["Bright Family", ["Panam Palmer", "Saul Bright", "Mitch Anderson"], 15], ["Afterlife Regulars", ["Rogue Amendiares", "Claire Russell", "Nix"], 15], ["Maelstrom Civil War", ["Royce", "Brick", "Dum Dum"], 15], ["Brick Loyalists", ["Brick", "Patricia", "Ellis Carter"], 10], ["Voodoo Council", ["Placide", "Brigitte"], 10], ["Familia", ["Jackie Welles", "Mama Welles"], 10], ["Old Barrio", ["Jackie Welles", "Gustavo Orta", "Padre"], 12], ["Peralez Household", ["Jefferson Peralez", "Elizabeth Peralez"], 8], ["Old Partners", ["T-Bug", "Rhino"], 8], ["Beast in Me Rivals", ["Claire Russell", "Peter Sampson"], 6], ["Ghost Town Grudge", ["Panam Palmer", "Nash"], 6]];
-function chemistry(lineup){const used=lineup.filter(Boolean),names=new Set(used.map(c=>c.name)),out=[];COMBOS.forEach(([n,m,b])=>{if(m.every(x=>names.has(x)))out.push([n,b])});const cnt={};used.forEach(c=>cnt[c.grp]=(cnt[c.grp]||0)+1);Object.entries(cnt).forEach(([a,n])=>{if(n>=3)out.push([a+' x'+n,(n-2)*6])});return out}
-function teamScore(lineup){const used=lineup.filter(Boolean);if(!used.length)return 0;let avg=lineup.reduce((s,c,p)=>s+(c?rating(c,p):0),0)/22;const cnt={};used.forEach(c=>cnt[c.aff]=(cnt[c.aff]||0)+1);let chem=Math.min(80,chemistry(lineup).reduce((s,x)=>s+x[1],0));return Math.round(300+(avg-45)*16+chem)}
+function teamScore(lineup){if(!lineup.some(Boolean))return 0;const avg=lineup.reduce((s,c,p)=>s+(c?rating(c,p):0),0)/22;return Math.round(300+(avg-45)*SLOPE)}
+const SLOPE=17;
 const OPP=[['Pacifica Scavs',350],['Wraiths Raiders',390],['Coyote Cojo Regulars',430],['Animals Pit Crew',470],['Moxes',505],['6th Street Patriots',540],['Valentinos',575],['Maelstrom Ripjacks',610],['Voodoo Boys',645],['Tyger Claws',680],['NCPD Precinct 9',715],['Aldecaldos Convoy',750],['Kang Tao Security',785],['Biotechnica Enforcers',815],['Militech Strike Team',845],['MaxTac',880],['Arasaka Elite',910]];
 const K=56;function winP(s,o){return Math.min(0.985,1/(1+Math.exp(-(s-o)/K)))}
 function season(s,rnd=Math.random){return OPP.map(([n,o])=>({n,o,w:rnd()<winP(s,o)}))}
@@ -75,7 +72,7 @@ function eligible(run){const L=legends(run)>=3;return CHARS.filter(c=>!run.used.
 function shuf(a,rnd){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function rollAff(run,rnd=Math.random,keep){const el=eligible(run);const cnt={};el.forEach(c=>cnt[c.grp]=(cnt[c.grp]||0)+1);let gs=Object.keys(cnt).filter(k=>cnt[k]>=4);if(!gs.length)gs=Object.keys(cnt);const g=keep||gs[Math.floor(rnd()*gs.length)];const pool=shuf(el.filter(c=>c.grp===g),rnd);run.roll={aff:g,opts:pool.slice(0,4+Math.floor(rnd()*3))}}
 function freshOffer(run,rnd=Math.random){rollAff(run,rnd,run.roll.aff)}
-if(typeof module!=='undefined')module.exports={freshOffer,chemistry,COMBOS,CHARS,POS,rating,teamScore,OPP,winP,season,newRun,eligible,rollAff,legends};
+if(typeof module!=='undefined')module.exports={freshOffer,CHARS,POS,rating,teamScore,OPP,winP,season,newRun,eligible,rollAff,legends};
 
 const $=s=>document.querySelector(s);const AT=['BODY','REFLEXES','TECH','INTEL','COOL'],FT=['SPD','STR','VIS','TGH','HND','CLT'];
 function ini(n){return n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase()}
@@ -90,10 +87,10 @@ const r=run.roll;$('#roll').innerHTML=`<span class="glitch" data-t="${r.aff}">${
 $('#rrA').disabled=!run.affR;$('#rrD').disabled=!run.offR;
 $('#opts').innerHTML=r.opts.map((c,i)=>{const[rn,rc]=rarity(c);return`<div class="card ${rc}" style="animation-delay:${i*60}ms" onclick="pick(${c.id})"><div class="tag">${rn}</div><div class="hd">${av(c)}<div><b>${c.name}</b><small>${c.aff}${c.grp!==c.aff&&c.grp!=='Netrunners'?'':''}</small><span class="dtag">${c.dist}</span></div></div><div class="st">${c.at.map((v,j)=>`<div><small>${AT[j]}</small><big>${v*5}</big></div>`).join('')}</div><em>${c.blurb}</em></div>`}).join('');
 $('#field').innerHTML=POS.map(([p],i)=>{const c=run.lineup[i];return`<div class="slot ${c?'full':''}"><b>${p}</b>${c?`${av(c,'av sm')}<span>${c.name}</span>`:''}</div>`}).join('');
-$('#picker').hidden=!sel;if(sel)$('#picker').innerHTML=`<div class="pk"><div class="hd">${av(sel)}<b>Place ${sel.name}</b></div><div class="pos">${POS.map(([p],i)=>run.lineup[i]?'':`<button onclick="place(${i})">${p}</button>`).join('')}</div><button class="cancel" onclick="sel=null;render()">✕ Back</button></div>`;
-const ch=chemistry(run.lineup);$('#chem').innerHTML=ch.map(([n,b])=>`<span class="chip">⚡ ${n} +${b}</span>`).join('')}
+$('#picker').hidden=!sel;if(sel)$('#picker').innerHTML=`<div class="pk"><div class="hd">${av(sel)}<b>Place ${sel.name}</b></div><div class="pos">${POS.map(([p],i)=>{const o=run.lineup[i];return o?`<button class="taken" disabled><b>${p}</b>${av(o,'av xs')}<small>${o.name}</small></button>`:`<button onclick="place(${i})"><b>${p}</b><small>open</small></button>`}).join('')}</div><button class="cancel" onclick="sel=null;render()">✕ Back</button></div>`;
+}
 function pick(id){sel=CHARS[id];render()}
-function place(i){if(!sel||run.lineup[i])return;const before=chemistry(run.lineup).map(x=>x[0]);run.lineup[i]=sel;run.used.add(sel.id);const nw=chemistry(run.lineup).filter(x=>!before.includes(x[0]));if(nw.length)toast('CHEMISTRY UNLOCKED: '+nw.map(x=>x[0]).join(', '));run.round++;nextRound()}
+function place(i){if(!sel||run.lineup[i])return;run.lineup[i]=sel;run.used.add(sel.id);run.round++;nextRound()}
 function reroll(t){if(t==='a'&&run.affR){run.affR=0;rollAff(run)}else if(t==='d'&&run.offR){run.offR=0;freshOffer(run)}sel=null;render(true)}
 function toast(t){const e=$('#toast');e.textContent=t;e.className='show';setTimeout(()=>e.className='',2200)}
 function grade(w){return w==17?'S+':w>=16?'S':w>=14?'A':w>=12?'B':w>=9?'C':w>=6?'D':'F'}
@@ -101,7 +98,7 @@ function finish(){$('#draft').hidden=true;$('#end').hidden=false;const S=teamSco
 $('#games').innerHTML='';$('#final').innerHTML='';g.forEach((x,i)=>setTimeout(()=>{const f=FLAV[x.w?'w':'l'][Math.floor(Math.random()*5)];$('#games').insertAdjacentHTML('beforeend',`<div class="g ${x.w?'win':'loss'}"><b>WK${i+1} ${x.w?'W':'L'}</b> vs ${x.n} (${x.o}) <small>${f}</small></div>`);if(i==16)showFinal(S,w)},i*220));}
 function showFinal(S,w){const gr=grade(w);const best=JSON.parse(localStorage.cp170best||'null');if(!best||w>best.w||(w==best.w&&S>best.s))localStorage.cp170best=JSON.stringify({w,s:S});const b=JSON.parse(localStorage.cp170best);
 $('#final').innerHTML=`<h2 class="${w==17?'perfect glitch':''}" data-t="${w}-${17-w}">${w}-${17-w}</h2><div class="grade">GRADE ${gr}</div><p>Team Score <b>${S}</b> · Best ever: ${b.w}-${17-b.w} (${b.s})</p>${w==17?'<p class="perfect">PERFECT SEASON. NIGHT CITY LEGEND.</p>':''}<h3>Your lineup: how their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
-window.shareText=`🏈 Cyberpunk 2077 17-0 Challenge\nRecord: ${w}-${17-w} (Grade ${gr})${w==17?' 🔥 PERFECT SEASON':''}\nTeam Score: ${S}\n`+POS.map(([p],i)=>`${p}: ${run.lineup[i].name}`).join('\n')+(chemistry(run.lineup).length?`\nChemistry: ${chemistry(run.lineup).map(x=>x[0]).join(', ')}`:'')+`\nPlay: ${location.href.split('#')[0]}`;}
+window.shareText=`🏈 Cyberpunk 2077 17-0 Challenge\nRecord: ${w}-${17-w} (Grade ${gr})${w==17?' 🔥 PERFECT SEASON':''}\nTeam Score: ${S}\n`+POS.map(([p],i)=>`${p}: ${run.lineup[i].name}`).join('\n')+`\nPlay: ${location.href.split('#')[0]}`;}
 function copy(){navigator.clipboard.writeText(window.shareText).then(()=>toast('Copied! Paste it in a text.'),()=>prompt('Copy:',window.shareText))}
 start();
 </script></body></html>
