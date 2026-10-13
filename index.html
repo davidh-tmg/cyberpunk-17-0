@@ -81,6 +81,8 @@ button.ghost,.cancel{background:transparent;color:var(--c);border:1px solid var(
 .ft div .av.sm{grid-row:span 2;margin:0}.ft div small{grid-column:2/4}
 @media(max-width:400px){body{padding:12px 10px 32px}#opts{grid-template-columns:1fr}.st big{font-size:20px}h1{font-size:21px}}
 .card .hd{padding-right:54px}.card .hd b{line-height:1.2}
+.cos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 4px}.co{background:var(--pn);border:1px solid;border-radius:8px;padding:10px;min-width:0}.co.best{border-color:var(--c);box-shadow:0 0 10px #00f0ff22}.co.weak{border-color:var(--r);box-shadow:0 0 10px #ff003c22}.co>small{display:block;font-weight:800;letter-spacing:1px;font-size:11px;margin-bottom:6px}.co.best>small{color:var(--c)}.co.weak>small{color:var(--r)}.co b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}.co .hd>div{min-width:0}.co span{font-size:12px;opacity:.8}
+@media(max-width:400px){.cos{grid-template-columns:1fr}}
 </style></head><body>
 <header class="top"><h1 class="glitch" data-t="CYBERPUNK 17-0">CYBERPUNK 17-0</h1><button class="helpbtn ghost" onclick="document.getElementById('help').hidden=false">? Scoring</button></header><small>Draft 22 Night City characters into a football lineup. Each round rolls an affiliation and offers 4-6 of its characters. One affiliation reroll and one fresh offer per run. Max 3 Legends. Then survive a 17-game season.</small>
 <div id="draft"><div class="bar"><span id="round"></span><span>Picks <b id="score"></b></span><span id="leg"></span></div>
@@ -103,7 +105,7 @@ button.ghost,.cancel{background:transparent;color:var(--c);border:1px solid var(
 <p>Put a netrunner on the line and it'll show. Smasher at wideout? Bold choice.</p>
 <h4>TEAM SCORE</h4>
 <p>Your Team Score is simply how well each of your 22 players fits their spot. Right character, right position, and the numbers stack up.</p>
-<h4>THE SEASON</h4>
+<h4>WHICH POSITIONS MATTER MOST</h4><p>Not every spot counts the same, just like the real NFL. Based on real-world positional value (pay and wins-above-replacement studies):</p><ul><li><b>QB</b> matters most, by a lot.</li><li><b>Next tier:</b> WR, CB, EDGE and offensive tackles.</li><li><b>Middle:</b> slot WR, safeties and DTs.</li><li><b>Solid but smaller:</b> LB, interior O-line and TE.</li><li><b>Least:</b> RB, then K.</li></ul><p>Your best talent belongs at quarterback.</p><h4>THE SEASON</h4>
 <p>You play 17 games against Night City crews that get tougher as you go, from Pacifica Scavs up to the Arasaka Elite. A higher Team Score means better odds, but upsets happen in this city. A 17-0 season is legend status.</p>
 <h4>DRAFT RULES</h4>
 <ul><li>Each round rolls an affiliation and offers 4-6 of its characters. Pick one, then choose an open position.</li>
@@ -117,7 +119,8 @@ const MERGE={Militech:'Corpos',Biotechnica:'Corpos',Wraiths:'Animals & Raiders',
 // stats: SPD STR SMT TGH HND
 const POS=[['QB',[1,0,4,1,2,3]],['RB',[4,2,0,2,1,1]],['WR',[4,0,1,0,3,1]],['WR',[4,0,1,0,3,1]],['SLOT',[4,0,2,0,2,1]],['TE',[1,3,0,2,2,0]],['LT',[0,4,1,3,1,0]],['LG',[0,4,0,3,1,0]],['C',[0,3,2,3,1,0]],['RG',[0,4,0,3,1,0]],['RT',[0,4,1,3,1,0]],['EDGE',[3,3,0,2,0,0]],['DT',[0,4,0,4,0,0]],['DT',[0,4,0,4,0,0]],['EDGE',[3,3,0,2,0,0]],['LB',[2,3,2,2,0,1]],['LB',[2,3,2,2,0,1]],['CB',[4,0,1,0,2,1]],['CB',[4,0,1,0,2,1]],['S',[3,1,2,1,1,1]],['S',[3,1,2,1,1,1]],['K',[0,1,0,0,2,5]]];
 function rating(c,p){const w=POS[p][1];let s=0,t=0;w.forEach((x,j)=>{s+=x*c.st[j];t+=x});return s/t}
-function teamScore(lineup){if(!lineup.some(Boolean))return 0;const avg=lineup.reduce((s,c,p)=>s+(c?rating(c,p):0),0)/22;return Math.round(300+(avg-45)*SLOPE)}
+const PV={QB:3,WR:1.5,CB:1.4,EDGE:1.4,LT:1.3,RT:1.3,SLOT:1.2,S:1.2,DT:1.1,LB:1,LG:1,C:1,RG:1,TE:.9,RB:.8,K:.4};
+function teamScore(lineup){if(!lineup.some(Boolean))return 0;let s=0,t=0;POS.forEach(([p],i)=>{t+=PV[p];if(lineup[i])s+=PV[p]*rating(lineup[i],i)});const avg=s/t;return Math.round(300+(avg-45)*SLOPE)}
 const SLOPE=17;
 const OPP=[['Pacifica Scavs',350],['Wraiths Raiders',390],['Coyote Cojo Regulars',430],['Animals Pit Crew',470],['Moxes',505],['6th Street Patriots',540],['Valentinos',575],['Maelstrom Ripjacks',610],['Voodoo Boys',645],['Tyger Claws',680],['NCPD Precinct 9',715],['Aldecaldos Convoy',750],['Kang Tao Security',785],['Biotechnica Enforcers',815],['Militech Strike Team',845],['MaxTac',880],['Arasaka Elite',910]];
 const K=56;function winP(s,o){return Math.min(0.985,1/(1+Math.exp(-(s-o)/K)))}
@@ -128,7 +131,7 @@ function eligible(run){const L=legends(run)>=3;return CHARS.filter(c=>!run.used.
 function shuf(a,rnd){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function rollAff(run,rnd=Math.random,keep){const el=eligible(run);const cnt={};el.forEach(c=>cnt[c.grp]=(cnt[c.grp]||0)+1);let gs=Object.keys(cnt).filter(k=>cnt[k]>=4);if(!gs.length)gs=Object.keys(cnt);const g=keep||gs[Math.floor(rnd()*gs.length)];const pool=shuf(el.filter(c=>c.grp===g),rnd);run.roll={aff:g,opts:pool.slice(0,4+Math.floor(rnd()*3))}}
 function freshOffer(run,rnd=Math.random){rollAff(run,rnd,run.roll.aff)}
-if(typeof module!=='undefined')module.exports={freshOffer,CHARS,POS,rating,teamScore,OPP,winP,season,newRun,eligible,rollAff,legends};
+if(typeof module!=='undefined')module.exports={PV,freshOffer,CHARS,POS,rating,teamScore,OPP,winP,season,newRun,eligible,rollAff,legends};
 
 const $=s=>document.querySelector(s);const AT=['BODY','REFLEXES','TECH','INTEL','COOL'],FT=['SPD','STR','VIS','TGH','HND','CLT'];
 function ini(n){return n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase()}
@@ -138,7 +141,7 @@ let run,phase='draft',sel=null;
 function rarity(c){if(c.legend)return['LEGEND','leg'];const a=c.at.reduce((s,x)=>s+x,0);return a>=72?['EPIC','epi']:a>=62?['RARE','rar']:['COMMON','com']}
 function start(){run=newRun();phase='draft';$('#end').hidden=true;$('#draft').hidden=false;nextRound()}
 function nextRound(){if(run.round>=22)return finish();rollAff(run);sel=null;render(true)}
-function render(anim){$('#round').textContent=`ROUND ${run.round+1}/22`;$('#score').textContent=`${run.round}/22`;$('#leg').textContent=`Legends ${legends(run)}/3`;
+function render(anim){if(anim&&window.scrollTo)try{window.scrollTo({top:0,behavior:'smooth'})}catch(e){};$('#round').textContent=`ROUND ${run.round+1}/22`;$('#score').textContent=`${run.round}/22`;$('#leg').textContent=`Legends ${legends(run)}/3`;
 const r=run.roll;$('#roll').innerHTML=`<span class="glitch" data-t="${r.aff}">${r.aff}</span> <small class="cy">${r.opts.length} on offer</small>`;if(anim){$('#roll').classList.remove('pop');void $('#roll').offsetWidth;$('#roll').classList.add('pop')}
 $('#rrA').disabled=!run.affR;$('#rrD').disabled=!run.offR;
 $('#opts').innerHTML=r.opts.map((c,i)=>{const[rn,rc]=rarity(c);return`<div class="card ${rc}" style="animation-delay:${i*60}ms" onclick="pick(${c.id})"><div class="tag">${rn}</div><div class="hd">${av(c)}<div><b>${c.name}</b><small>${c.aff}${c.grp!==c.aff&&c.grp!=='Netrunners'?'':''}</small><span class="dtag">${c.dist}</span></div></div><div class="st">${c.at.map((v,j)=>`<div><small>${AT[j]}</small><big>${v*5}</big></div>`).join('')}</div><em>${c.blurb}</em></div>`}).join('');
@@ -154,7 +157,9 @@ function finish(){sel=null;$('#picker').hidden=true;$('#picker').innerHTML='';$(
 $('#games').innerHTML='';$('#final').innerHTML='<div class="sim">Simulating season…</div>';$('#lineup').innerHTML='';g.forEach((x,i)=>setTimeout(()=>{const f=FLAV[x.w?'w':'l'][Math.floor(Math.random()*5)];$('#games').insertAdjacentHTML('beforeend',`<div class="g ${x.w?'win':'loss'}"><b>WK${i+1} ${x.w?'W':'L'}</b> vs ${x.n} (${x.o}) <small>${f}</small></div>`);if(i==16)showFinal(S,w)},i*220));}
 function showFinal(S,w){const gr=grade(w);const best=JSON.parse(localStorage.cp170best||'null');if(!best||w>best.w||(w==best.w&&S>best.s))localStorage.cp170best=JSON.stringify({w,s:S});const b=JSON.parse(localStorage.cp170best);
 $('#final').innerHTML=`<h2 class="${w==17?'perfect glitch':''}" data-t="${w}-${17-w}">${w}-${17-w}</h2><div class="grade">GRADE ${gr}</div><p>Team Score <b>${S}</b> · Best ever: ${b.w}-${17-b.w} (${b.s})</p>${w==17?'<p class="perfect">PERFECT SEASON. NIGHT CITY LEGEND.</p>':''}`;
-$('#lineup').innerHTML=`<h3>Your lineup: how their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
+const rs=POS.map(([p],i)=>({p,c:run.lineup[i],r:Math.round(rating(run.lineup[i],i))}));const bf=rs.reduce((a,b)=>b.r>a.r?b:a),wl=rs.reduce((a,b)=>b.r<a.r?b:a);
+const co=(t,x,cl)=>`<div class="co ${cl}"><small>${t}</small><div class="hd">${av(x.c)}<div><b>${x.c.name}</b><span>${x.p} · Rating ${x.r}</span></div></div></div>`;
+$('#lineup').innerHTML=`<div class="cos">${co('★ BEST FIT',bf,'best')}${co('⚠ WEAKEST LINK',wl,'weak')}</div>`+`<h3>Your lineup: how their attributes translated to football</h3><div class="ft">${POS.map(([p],i)=>{const c=run.lineup[i];return`<div>${av(c,'av sm')}<b>${p}</b> ${c.name} <small>${FT.map((k,j)=>k+' '+Math.round(c.st[j])).join(' · ')}</small></div>`}).join('')}</div><small>Body→strength/toughness · Reflexes→speed/hands · Tech→hands/technique · Intelligence→vision · Cool→toughness/clutch &amp; kicking</small>`;
 window.shareText=`🏈 Cyberpunk 2077 17-0 Challenge\nRecord: ${w}-${17-w} (Grade ${gr})${w==17?' 🔥 PERFECT SEASON':''}\nTeam Score: ${S}\n`+POS.map(([p],i)=>`${p}: ${run.lineup[i].name}`).join('\n')+`\nPlay: ${location.href.split('#')[0]}`;}
 function copy(){if(!window.shareText){toast('Season still playing…');return}navigator.clipboard.writeText(window.shareText).then(()=>toast('Copied! Paste it in a text.'),()=>prompt('Copy:',window.shareText))}
 start();
